@@ -25,19 +25,16 @@ local config = {
     tabs = {"Home", "Farm", "Misc", "Teleport", "FPS", "Alts"}
 }
 
--- Инициализация игрока и ремов
 local player = Players.LocalPlayer
 local bubbleRemote = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Framework"):WaitForChild("Network"):WaitForChild("Remote")
 local pickupRemote = ReplicatedStorage:FindFirstChild("Remotes") and ReplicatedStorage.Remotes:FindFirstChild("Pickups") and ReplicatedStorage.Remotes.Pickups:FindFirstChild("CollectPickup")
 
--- Создание GUI
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "LuckyCC"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.DisplayOrder = 1000
 ScreenGui.Parent = player:WaitForChild("PlayerGui")
 
--- Основной фрейм
 local MainFrame = Instance.new("Frame")
 MainFrame.Size = UDim2.new(0, config.width, 0, config.height)
 MainFrame.Position = UDim2.new(0.5, -config.width / 2, 0.5, -config.height / 2)
@@ -341,7 +338,6 @@ for i = 1, 6 do
     end)
 end
 
--- Состояния и функции
 local states = {
     autoBubbleEnabled = false,
     autoSellEnabled = false,
@@ -473,7 +469,6 @@ local function autoProgressPurchase()
     end
 end
 
--- Полностью переработанный Auto-Islands
 local function autoOpenIslands()
     local connection
     connection = RunService.Heartbeat:Connect(function()
@@ -498,7 +493,6 @@ local function farmCollectibles()
         if rendered then
             local itemsToRemove = {}
             
-            -- Сначала собираем все предметы для удаления
             for _, chunker in ipairs(rendered:GetChildren()) do
                 if chunker.Name:match("Chunker") then
                     for _, item in ipairs(chunker:GetChildren()) do
@@ -508,8 +502,7 @@ local function farmCollectibles()
                     end
                 end
             end
-            
-            -- Затем обрабатываем и удаляем
+
             for _, item in ipairs(itemsToRemove) do
                 if item and item.Parent then
                     pcall(function()
@@ -814,7 +807,6 @@ local function setupSmoothSlider(sliderData, valueName, updateFunc)
     end)
 end
 
--- Настройка плавных ползунков
 setupSmoothSlider(sliders.WalkSpeed, "walkSpeed", function(value)
     local character = player.Character
     if character then
@@ -833,7 +825,6 @@ end)
 
 setupSmoothSlider(sliders.MysteryGiftAmount, "mysteryGiftAmount")
 
--- Обработчики кнопок управления
 CloseButton.MouseButton1Click:Connect(function()
     states.scriptActive = false
     ScreenGui:Destroy()
@@ -853,7 +844,6 @@ MinimizeButton.MouseButton1Click:Connect(function()
     ContentFrame.Visible = not isMinimized
 end)
 
--- Перетаскивание окна
 local isDraggingWindow = false
 local dragStartMousePos, dragStartFramePos
 
@@ -883,7 +873,6 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
--- Бесконечный прыжок
 UserInputService.JumpRequest:Connect(function()
     if states.infiniteJumpEnabled then
         local character = player.Character
@@ -896,6 +885,5 @@ UserInputService.JumpRequest:Connect(function()
     end
 end)
 
--- Инициализация
 setfpscap(states.fpsLimit)
 task.spawn(restrictFPS)
